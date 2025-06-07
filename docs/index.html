@@ -35,7 +35,7 @@
         }
         button {
             padding: 10px 20px;
-            background-color:禁止: #4285f4;
+            background-color: #4285f4;
             color: white;
             border: none;
             border-radius: 4px;
@@ -95,7 +95,7 @@
             border: 1px solid #bbdefb;
             border-radius: 4px;
             font-size: 16px;
-            color: #1ស: 1a237e; /* Dark blue text */
+            color: #1a237e; /* Dark blue text */
             display: none; /* Hidden until walking/biking with shops */
             display: flex;
             align-items: center;
@@ -151,7 +151,7 @@
             <svg class="icon" viewBox="0 0 24 24" fill="#1a237e">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17h2v-2.26c.79.52 1.71.86 2.74.86s1.95-.34 2.74-.86V17h2v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm0 2c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5z"/>
             </svg>
-            <span id="shop-text">Info: Searching for open grocery shops along route...</span>
+            <span id="shop-text">Info: Searching for open grocery shops within 1 km of route...</span>
         </div>
         <div id="sun-times"></div>
     </div>
@@ -242,7 +242,7 @@
 
             if (mode === 'WALKING' || mode === 'BICYCLING') {
                 shopDiv.style.display = 'flex';
-                shopText.innerHTML = 'Info: Searching for open grocery shops within 1km of route...';
+                shopText.innerHTML = 'Info: Searching for open grocery shops within 1 km of route...';
                 searchGroceryShops(result);
             } else {
                 shopDiv.style.display = 'none';
@@ -260,7 +260,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Goog-Api-Key': API_KEY,
-                    'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.openNow'
+                    'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.openNow,places.location'
                 },
                 body: JSON.stringify({
                     textQuery: 'grocery store',
@@ -276,7 +276,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.places && data.places.length > 0) {
-                        let shopList = 'Info: Open grocery shops within ~1km of route:<br>';
+                        let shopList = 'Info: Open grocery shops within ~1 km of route:<br>';
                         let openShops = 0;
                         data.places.forEach(place => {
                             if (place.openNow) {
@@ -287,10 +287,10 @@
                         if (openShops > 0) {
                             shopText.innerHTML = shopList;
                         } else {
-                            shopText.innerHTML = 'Info: No open grocery shops found within ~1km of route.';
+                            shopText.innerHTML = 'Info: No open grocery shops found within ~1 km of route.';
                         }
                     } else {
-                        shopText.innerHTML = 'Info: No grocery shops found within ~1km of route.';
+                        shopText.innerHTML = 'Info: No grocery shops found within ~1 km of route.';
                     }
                 })
                 .catch(error => {
