@@ -3,477 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartoon Black-and-White Timeline with Pop-Up Attachments</title>
+    <title>Transport Directions</title>
     <style>
         body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            background-color: #f5f5f0;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            color: #000;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
         }
         .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
             max-width: 1200px;
-            width: 100%;
-        }
-        .card {
-            background-color: #fff;
-            border: 3px solid #000;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .card:hover {
-            transform: scale(1.02);
-        }
-        .card-header {
-            padding: 15px;
-            color: #000;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            border-bottom: 2px solid #000;
-        }
-        .card-header.color-0 { background: #e0e0e0; }
-        .card-header.color-1 { background: #c0c0c0; }
-        .card-header.color-2 { background: #a0a0a0; }
-        .card-header.color-3 { background: #808080; }
-        .timeline {
-            position: relative;
-            padding: 15px 0;
-            display: none;
-        }
-        .timeline.active {
-            display: block;
-        }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 4px;
-            background-color: #333;
-            transform: translateX(-50%);
-        }
-        .message {
-            display: flex;
-            margin: 15px 0;
-            position: relative;
-            align-items: flex-start;
-        }
-        .message.left {
-            justify-content: flex-start;
-        }
-        .message.right {
-            justify-content: flex-end;
-        }
-        .message-content {
-            max-width: 60%;
-            padding: 10px 14px;
-            border: 2px solid #000;
-            border-radius: 12px;
-            background-color: #fff;
-        }
-        .message.left .message-content {
-            margin-left: 50px;
-            background-color: #f0f0f0;
-        }
-        .message.right .message-content {
-            margin-right: 50px;
-            background-color: #d0d0d0;
-        }
-        .username {
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .timestamp {
-            font-size: 11px;
-            color: #444;
-            margin: 5px 0 0 10px;
-            position: absolute;
-            bottom: -18px;
-        }
-        .message.left .timestamp {
-            left: 50px;
-        }
-        .message.right .timestamp {
-            right: 50px;
-        }
-        .message::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            background-color: #000;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-        }
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin: 0 10px;
-            object-fit: cover;
-            border: 2px solid #000;
-            filter: grayscale(1) contrast(1.2);
-        }
-        .message.left .avatar {
-            order: -1;
-        }
-        .message.right .avatar {
-            order: 1;
-        }
-        .attachment {
-            margin-top: 8px;
-            max-width: 100%;
-            border: 2px solid #000;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        .attachment img {
-            max-width: 200px;
-            border-radius: 8px;
-            display: block;
-        }
-        .attachment audio {
-            width: 200px;
-        }
-        .attachment video {
-            max-width: 200px;
-            border-radius: 8px;
-        }
-        .attachment.x-post {
-            border: 1px solid #000;
-            border-radius: 8px;
-            padding: 10px;
-            background-color: #fff;
-            max-width: 500px;
-        }
-        .attachment.x-post a {
-            color: #333;
-            text-decoration: none;
-            font-size: 13px;
-        }
-        .attachment.x-post a:hover {
-            text-decoration: underline;
-        }
-        .attachment.youtube {
-            max-width: 280px;
-        }
-        .attachment.youtube iframe {
-            width: 100%;
-            height: 158px;
-            border: 0;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #fff;
-            border: 3px solid #000;
-            border-radius: 8px;
+            margin: 0 auto;
             padding: 20px;
-            max-width: 90%;
-            max-height: 90%;
-            overflow: auto;
-            position: relative;
-        }
-        .modal-content img {
-            max-width: 100%;
-            height: auto;
-        }
-        .modal-content audio {
-            width: 100%;
-        }
-        .modal-content video {
-            max-width: 100%;
-            height: auto;
-        }
-        .modal-content .x-post {
-            max-width: 100%;
-        }
-        .modal-content .youtube iframe {
-            width: 560px;
-            height: 315px;
-            max-width: 100%;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #000;
-        }
-        .error {
-            color: #000;
-            text-align: center;
-            margin: 20px;
-            font-size: 16px;
-            background: #fff;
-            padding: 10px;
-            border: 2px solid #000;
+            background-color: white;
             border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .retry-btn {
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
             display: block;
-            margin: 10px auto;
-            padding: 8px 16px;
-            border: 2px solid #000;
-            border-radius: 6px;
-            background: #e0e0e0;
-            cursor: pointer;
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            .attachment.x-post, .attachment.youtube {
-                max-width: 100%;
-            }
-            .attachment.youtube iframe {
-                height: calc(100vw * 9 / 16);
-            }
-            .modal-content .youtube iframe {
-                height: calc(90vw * 9 / 16);
-            }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color:禁止: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #357ae8;
+        }
+        .zoom-controls {
+            margin-bottom: 10px;
+        }
+        .map-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        #map {
+            height: 400px;
+            width: 60%;
+            border-radius: 4px;
+        }
+        #directions {
+            width: 40%;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        #travel-info {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        #warning-sign {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffeb3b; /* Yellow for warning */
+            border: 1px solid #fbc02d;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #b71c1c; /* Red text for emphasis */
+            display: none; /* Hidden until national road detected */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #shop-info {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e3f2fd; /* Light blue for info */
+            border: 1px solid #bbdefb;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #1ស: 1a237e; /* Dark blue text */
+            display: none; /* Hidden until walking/biking with shops */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #sun-times {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .icon {
+            width: 30px;
+            height: 30px;
         }
     </style>
 </head>
 <body>
-    <div class="container" id="container"></div>
-    <div class="error" id="error" style="display: none;"></div>
-    <button class="retry-btn" id="retry" style="display: none;">Retry Fetch</button>
-    <div class="modal" id="modal">
-        <div class="modal-content" id="modal-content">
-            <span class="close-btn" id="close-btn">&times;</span>
+    <div class="container">
+        <h2>Transport Directions</h2>
+        <div class="input-group">
+            <label for="start">Starting Point:</label>
+            <input type="text" id="start" placeholder="Enter starting location (e.g., Eiffel Tower, Paris)">
+            <label for="end">Destination:</label>
+            <input type="text" id="end" placeholder="Enter destination (e.g., Louvre Museum, Paris)">
+            <label for="mode">Travel Mode:</label>
+            <select id="mode">
+                <option value="DRIVING">Driving</option>
+                <option value="WALKING">Walking</option>
+                <option value="BICYCLING">Bicycling</option>
+                <option value="TRANSIT" selected>Public Transit</option>
+            </select>
+            <button onclick="calculateRoute()">Get Directions</button>
         </div>
+        <div class="zoom-controls">
+            <button onclick="zoomIn()">Zoom In</button>
+            <button onclick="zoomOut()">Zoom Out</button>
+        </div>
+        <div class="map-container">
+            <div id="map"></div>
+            <div id="directions"></div>
+        </div>
+        <div id="travel-info"></div>
+        <div id="warning-sign">
+            <svg class="icon" viewBox="0 0 24 24" fill="#b71c1c">
+                <path d="M12 2L1 21h22L12 2zm0 3.5L20.5 19H3.5L12 5.5zM12 8v7m0 2h.01"/>
+            </svg>
+            <span>Caution: National road detected. Watch for hazards!</span>
+        </div>
+        <div id="shop-info">
+            <svg class="icon" viewBox="0 0 24 24" fill="#1a237e">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17h2v-2.26c.79.52 1.71.86 2.74.86s1.95-.34 2.74-.86V17h2v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm0 2c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5z"/>
+            </svg>
+            <span id="shop-text">Info: Searching for open grocery shops along route...</span>
+        </div>
+        <div id="sun-times"></div>
     </div>
 
-    <!-- X Widget Script for Embedded Posts -->
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJswns9qd4jh6awTSYDgCcMBKIMkotbEY&callback=initMap" async defer></script>
     <script>
-        const headerColors = ['color-0', 'color-1', 'color-2', 'color-3'];
-        const fallbackData = [
-            {
-                name: 'Sample Cartoon Chat',
-                messages: [
-                    {
-                        text: 'Hey, look at this!',
-                        sender: 'left',
-                        timestamp: '10:30 AM, Jun 1, 2025',
-                        username: 'Mickey',
-                        photoUrl: 'https://via.placeholder.com/40?text=Mickey',
-                        attachment: { type: 'image', url: 'https://via.placeholder.com/200?text=Cartoon' }
-                    },
-                    {
-                        text: 'Wow, check this video!',
-                        sender: 'right',
-                        timestamp: '10:32 AM, Jun 1, 2025',
-                        username: 'Minnie',
-                        photoUrl: 'https://via.placeholder.com/40?text=Minnie',
-                        attachment: { type: 'youtube', url: 'https://youtu.be/0SdcfsD_WVE?feature=shared' }
-                    }
-                ]
-            }
-        ];
+        let map;
+        let directionsService;
+        let directionsRenderer;
+        const API_KEY = 'AIzaSyDJswns9qd4jh6awTSYDgCcMBKIMkotbEY'; // Your API key
 
-        function getYouTubeVideoId(url) {
-            const regex = /[?&]v=([a-zA-Z0-9_-]{11})|youtu\.be\/([a-zA-Z0-9_-]{11})|embed\/([a-zA-Z0-9_-]{11})/;
-            const match = url.match(regex);
-            return match ? match[1] || match[2] || match[3] : null;
-        }
-
-        function openModal(type, content) {
-            const modal = document.getElementById('modal');
-            const modalContent = document.getElementById('modal-content');
-            modalContent.innerHTML = '<span class="close-btn" id="close-btn">&times;</span>';
-            
-            let html = '';
-            try {
-                if (type === 'image') {
-                    html = `<img src="${content}" alt="Attachment" onerror="this.src='https://via.placeholder.com/200?text=Error'">`;
-                } else if (type === 'audio') {
-                    html = `<audio controls><source src="${content}" type="audio/mpeg"></audio>`;
-                } else if (type === 'video') {
-                    html = `<video controls><source src="${content}" type="video/mp4"></video>`;
-                } else if (type === 'xPost') {
-                    html = `<div class="x-post">${content}</div>`;
-                } else if (type === 'youtube') {
-                    const videoId = getYouTubeVideoId(content);
-                    html = videoId 
-                        ? `<div class="youtube"><iframe title="YouTube video" src="https://www.youtube.com/embed/${videoId}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
-                        : 'Error: Invalid YouTube URL';
-                }
-            } catch (e) {
-                console.error('Modal error:', e);
-                html = 'Error: Unable to load attachment';
-            }
-            
-            modalContent.innerHTML += html;
-            modal.style.display = 'flex';
-            
-            document.getElementById('close-btn').addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
+        function initMap() {
+            // Initialize the map, centered on Paris
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 48.8566, lng: 2.3522 }, // Coordinates for Paris, France
+                zoom: 12, // Zoom level suitable for city view
+                zoomControl: false // Disable default zoom controls for custom buttons
             });
-            
-            if (type === 'xPost' && window.twttr) {
-                window.twttr.widgets.load(modalContent);
+
+            // Initialize Directions service and renderer
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+            directionsRenderer.setPanel(document.getElementById('directions'));
+
+            // Fetch sunrise and sunset times for Paris
+            fetchSunTimes(48.8566, 2.3522);
+        }
+
+        function calculateRoute() {
+            const start = document.getElementById('start').value;
+            const end = document.getElementById('end').value;
+            const mode = document.getElementById('mode').value;
+
+            if (!start || !end) {
+                alert('Please enter both starting point and destination.');
+                return;
+            }
+
+            const request = {
+                origin: start,
+                destination: end,
+                travelMode: mode // Uses selected mode: DRIVING, WALKING, BICYCLING, or TRANSIT
+            };
+
+            directionsService.route(request, (result, status) => {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(result);
+                    // Display total travel duration
+                    const route = result.routes[0].legs[0];
+                    const duration = route.duration.text;
+                    document.getElementById('travel-info').innerHTML = 
+                        `<strong>Total Travel Duration:</strong> ${duration}`;
+                    
+                    // Check for national roads and show warning
+                    checkForNationalRoad(result);
+                    // Check for walking/biking and search for open grocery shops
+                    checkForShops(mode, result);
+                } else {
+                    alert('Directions request failed: ' + status);
+                    document.getElementById('travel-info').innerHTML = '';
+                    document.getElementById('warning-sign').style.display = 'none';
+                    document.getElementById('shop-info').style.display = 'none';
+                }
+            });
+        }
+
+        function checkForNationalRoad(result) {
+            const warningDiv = document.getElementById('warning-sign');
+            const steps = result.routes[0].legs[0].steps;
+            let nationalRoadDetected = false;
+
+            // Check each step for national road indicators
+            for (let i = 0; i < steps.length; i++) {
+                const instructions = steps[i].instructions;
+                if (instructions && /US-|N-|A-|Highway/i.test(instructions)) {
+                    nationalRoadDetected = true;
+                    break;
+                }
+            }
+
+            warningDiv.style.display = nationalRoadDetected ? 'flex' : 'none';
+        }
+
+        function checkForShops(mode, result) {
+            const shopDiv = document.getElementById('shop-info');
+            const shopText = document.getElementById('shop-text');
+
+            if (mode === 'WALKING' || mode === 'BICYCLING') {
+                shopDiv.style.display = 'flex';
+                shopText.innerHTML = 'Info: Searching for open grocery shops within 1km of route...';
+                searchGroceryShops(result);
+            } else {
+                shopDiv.style.display = 'none';
             }
         }
 
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            modal.style.display = 'none';
-        }
+        function searchGroceryShops(result) {
+            const shopText = document.getElementById('shop-text');
+            const route = result.routes[0];
+            const polyline = route.overview_polyline; // Encoded polyline from Directions API
 
-        function createCard(conversation, index) {
-            if (!conversation || !conversation.name || !Array.isArray(conversation.messages)) {
-                console.warn('Invalid conversation data:', conversation);
-                return null;
-            }
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.setAttribute('aria-label', `Conversation card: ${conversation.name}`);
-            
-            const header = document.createElement('div');
-            header.className = `card-header ${headerColors[index % headerColors.length]}`;
-            header.textContent = conversation.name || 'Untitled';
-            
-            const timeline = document.createElement('div');
-            timeline.className = 'timeline';
-            
-            conversation.messages.forEach(message => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${message.sender || 'left'}`;
-                
-                const avatar = document.createElement('img');
-                avatar.className = 'avatar';
-                avatar.src = message.photoUrl || 'https://via.placeholder.com/40?text=User';
-                avatar.alt = `${message.username || 'User'}'s avatar`;
-                avatar.onerror = () => { avatar.src = 'https://via.placeholder.com/40?text=Default'; };
-                
-                const content = document.createElement('div');
-                content.className = 'message-content';
-                
-                let attachmentHtml = '';
-                if (message.attachment) {
-                    try {
-                        if (message.attachment.type === 'image') {
-                            attachmentHtml = `<div class="attachment" onclick="openModal('image', '${message.attachment.url}')"><img src="${message.attachment.url}" alt="Attachment" onerror="this.src='https://via.placeholder.com/200?text=Error'"></div>`;
-                        } else if (message.attachment.type === 'audio') {
-                            attachmentHtml = `<div class="attachment" onclick="openModal('audio', '${message.attachment.url}')"><audio controls><source src="${message.attachment.url}" type="audio/mpeg"></audio></div>`;
-                        } else if (message.attachment.type === 'video') {
-                            attachmentHtml = `<div class="attachment" onclick="openModal('video', '${message.attachment.url}')"><video controls><source src="https://via.placeholder.com/200?text=Video" alt="Video thumbnail"></video></div>`;
-                        } else if (message.attachment.type === 'xPost') {
-                            const embedCode = message.attachment.embedCode || '<a href="#" onclick="return false;">Failed to load post</a>';
-                            attachmentHtml = `<div class="attachment x-post" onclick="openModal('xPost', \`${embedCode.replace(/`/g, '\\`')}\`)">${embedCode}</div>`;
-                        } else if (message.attachment.type === 'youtube') {
-                            const videoId = getYouTubeVideoId(message.attachment.url);
-                            attachmentHtml = videoId 
-                                ? `<div class="attachment youtube" onclick="openModal('youtube', '${message.attachment.url}')"><iframe title="YouTube video" src="https://www.youtube.com/embed/${videoId}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
-                                : `<div class="attachment youtube">Error: Invalid YouTube URL</div>`;
+            // Places API Search Along Route request
+            const request = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Goog-Api-Key': API_KEY,
+                    'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.openNow'
+                },
+                body: JSON.stringify({
+                    textQuery: 'grocery store',
+                    searchAlongRouteParameters: {
+                        polyline: {
+                            encodedPolyline: polyline
                         }
-                    } catch (e) {
-                        console.error('Attachment error:', e);
-                        attachmentHtml = '<div class="attachment">Error: Invalid attachment</div>';
                     }
-                }
-                
-                content.innerHTML = `
-                    <div class="username">${message.username || 'User'}</div>
-                    ${message.text || 'No message'}
-                    ${attachmentHtml}
-                    <div class="timestamp">${message.timestamp || 'Unknown time'}</div>
-                `;
-                
-                messageDiv.appendChild(avatar);
-                messageDiv.appendChild(content);
-                timeline.appendChild(messageDiv);
-            });
-            
-            card.appendChild(header);
-            card.appendChild(timeline);
-            
-            card.addEventListener('click', (e) => {
-                if (!e.target.closest('.attachment')) {
-                    timeline.classList.toggle('active');
-                    if (timeline.classList.contains('active') && window.twttr) {
-                        window.twttr.widgets.load(timeline);
+                })
+            };
+
+            fetch('https://places.googleapis.com/v1/places:searchText', request)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.places && data.places.length > 0) {
+                        let shopList = 'Info: Open grocery shops within ~1km of route:<br>';
+                        let openShops = 0;
+                        data.places.forEach(place => {
+                            if (place.openNow) {
+                                openShops++;
+                                shopList += `- ${place.displayName.text} (${place.formattedAddress})<br>`;
+                            }
+                        });
+                        if (openShops > 0) {
+                            shopText.innerHTML = shopList;
+                        } else {
+                            shopText.innerHTML = 'Info: No open grocery shops found within ~1km of route.';
+                        }
+                    } else {
+                        shopText.innerHTML = 'Info: No grocery shops found within ~1km of route.';
                     }
-                }
-            });
-            
-            return card;
+                })
+                .catch(error => {
+                    console.error('Error fetching grocery shops:', error);
+                    shopText.innerHTML = 'Info: Error searching for open grocery shops.';
+                });
         }
 
-        async function loadConversations() {
-            const container = document.getElementById('container');
-            const errorDiv = document.getElementById('error');
-            const retryBtn = document.getElementById('retry');
-            container.innerHTML = '';
-            errorDiv.style.display = 'none';
-            retryBtn.style.display = 'none';
-            
-            try {
-                const jsonUrl = 'https://raw.githubusercontent.com/yblebon/datasources/refs/heads/main/conversations.json';
-                const response = await fetch(jsonUrl);
-                if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                const data = await response.json();
-                console.log('Fetched JSON:', data);
-                
-                if (!Array.isArray(data) || !data.length) {
-                    throw new Error('Invalid JSON: Empty or not an array');
-                }
-                
-                data.forEach((conversation, index) => {
-                    const card = createCard(conversation, index);
-                    if (card) container.appendChild(card);
-                });
-                
-                if (!container.children.length) {
-                    throw new Error('No valid conversations found');
-                }
-            } catch (error) {
-                console.error('Load error:', error);
-                errorDiv.textContent = `Error: ${error.message}. Using fallback data.`;
-                errorDiv.style.display = 'block';
-                retryBtn.style.display = 'inline-block';
-                
-                fallbackData.forEach((conversation, index) => {
-                    const card = createCard(conversation, index);
-                    if (card) container.appendChild(card);
-                });
-            }
+        function zoomIn() {
+            map.setZoom(map.getZoom() + 1);
         }
 
-        document.getElementById('retry').addEventListener('click', loadConversations);
-        loadConversations();
+        function zoomOut() {
+            map.setZoom(map.getZoom() - 1);
+        }
+
+        function fetchSunTimes(lat, lng) {
+            const url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&date=today&formatted=0`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'OK') {
+                        const sunrise = new Date(data.results.sunrise).toLocaleTimeString();
+                        const sunset = new Date(data.results.sunset).toLocaleTimeString();
+                        document.getElementById('sun-times').innerHTML = 
+                            `<strong>Sunrise in Paris:</strong> ${sunrise}<br>` +
+                            `<strong>Sunset in Paris:</strong> ${sunset}`;
+                    } else {
+                        document.getElementById('sun-times').innerHTML = 
+                            'Error loading sunrise/sunset times.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching sunrise/sunset:', error);
+                    document.getElementById('sun-times').innerHTML = 
+                        'Error loading sunrise/sunset times.';
+                });
+        }
     </script>
 </body>
 </html>
